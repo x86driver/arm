@@ -3,7 +3,7 @@
 _Reset:
 	B Reset_Handler /* Reset */
 	B . /* Undefined */
-	B Data_Abort /* SWI */
+	B . /* SWI */
 	B . /* Prefetch Abort */
 	B . /* Data Abort */
 	B . /* reserved */
@@ -13,17 +13,30 @@ _Reset:
 Reset_Handler:
 	LDR sp, =stack_top
 	BL c_entry
-        ldr r0, instruction
-        mov r2, #0x08
-        str r0, [r2]
+
+        adr r0, SWI_Handler
+	mov r1, #0x08
+	sub r0, r0, r1
+	mov r0, r0, asr #2	/* r0 = (SWI_Handler-8)/4 = offset */
+	sub r1, r0, #2		/* r1 = offset - 2 */
+	mov r2, #0x0ea00	/* r2 = 0xea00 */
+	mov r2, r2, lsl #16	/* r2 = 0xea000000 */
+	orr r1, r1, r2		/* r1 = 0xea00r1, assume lsl lower 16 bits will be zero */
+        mov r3, #0x08
+        str r1, [r3]
+
 	swi 0x0
 	B .
 
-Data_Abort:
+SWI_Handler:
 	LDR sp, =stack_top
-	BL data_entry
+	adr r0, text
+	BL print_uart0
 	B .
 
 
 instruction:
 	.word 0xea00402b
+
+text:
+	.byte 'I',' ','a','m',' ','S','W','I','\n',0
