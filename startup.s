@@ -29,6 +29,9 @@ Reset_Handler:
         str r1, [r3]
 
 	bl setup_timer
+	mrs r1, cpsr
+	bic r1, r1, #0x80
+	msr cpsr_c, r1
 	B .
 
 SWI_Handler:
