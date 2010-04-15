@@ -4,6 +4,8 @@ volatile unsigned int * const UART0DR = (unsigned int *)0x101f1000;
 volatile unsigned int * const Timer1Load = (unsigned int*)(TIMER0 + 0);
 volatile unsigned int * const Timer1Control = (unsigned int*)(TIMER0 + 0x08);
 
+volatile unsigned int * const PIC_IntEnable = (unsigned int*)0x10140000;
+
 void print_uart0(const char *s) {
     while(*s != '\0') { /* Loop until end of string */
 	*UART0DR = (unsigned int)(*s); /* Transmit char */
@@ -41,8 +43,19 @@ void itoa(unsigned int data)
 
 void setup_timer()
 {
+	volatile unsigned int val;
 	print_uart0("Try to setup timer\n");
-	*Timer1Load = 0x10;
-	*Timer1Control = 0x0A1;
+//	val = *Timer1Control;
+//	val = 0x0a0;
+//	*Timer1Control = val;
+
+	*Timer1Control = 0x42;
+	*PIC_IntEnable = 0x010;
+	*Timer1Load = 0x80b0;
+	*Timer1Control = 0xe2;
+
+//	val = *Timer1Load;
+//	val = 0x10;
+//	*Timer1Load = val;
 }
 
