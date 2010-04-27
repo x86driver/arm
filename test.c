@@ -4,7 +4,7 @@ volatile unsigned int * const UART0DR = (unsigned int *)0x101f1000;
 volatile unsigned int * const Timer1Load = (unsigned int*)(TIMER0 + 0);
 volatile unsigned int * const Timer1Control = (unsigned int*)(TIMER0 + 0x08);
 
-volatile unsigned int * const PIC_IntEnable = (unsigned int*)0x10140000;
+volatile unsigned int * const PIC_IntEnable = (unsigned int*)0x10140010;
 
 void print_uart0(const char *s) {
     while(*s != '\0') { /* Loop until end of string */
