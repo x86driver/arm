@@ -1,5 +1,5 @@
-#CC=/home/shane/toolchain/arm-eabi-4.4.0/bin/arm-eabi
-CC=/home/shane/beagledroid/prebuilt/linux-x86/toolchain/arm-eabi-4.3.1/bin/arm-eabi
+CC=/home/shane/toolchain/arm-eabi-4.4.0/bin/arm-eabi
+#CC=/home/shane/beagledroid/prebuilt/linux-x86/toolchain/arm-eabi-4.3.1/bin/arm-eabi
 
 all: test.bin
 

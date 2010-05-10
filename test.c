@@ -1,10 +1,41 @@
-volatile unsigned int * const UART0DR = (unsigned int *)0x101f1000; 
+#define NULL (void*)(0)
+
+volatile unsigned int * const UART0DR = (unsigned int *)0x101f1000;
 //volatile unsigned int * const UART0DR = (unsigned int *)0x10009000;
 #define TIMER0 0x101e2000
 volatile unsigned int * const Timer1Load = (unsigned int*)(TIMER0 + 0);
 volatile unsigned int * const Timer1Control = (unsigned int*)(TIMER0 + 0x08);
 
 volatile unsigned int * const PIC_IntEnable = (unsigned int*)0x10140010;
+
+struct cpu_state {
+	unsigned int r4,r5,r6,r7,r8,r9,r10,r11,r12;
+	unsigned int cpsr;
+};
+
+union thread_info {
+	struct cpu_state cpu;
+	unsigned char stack[4096];
+};
+
+union thread_info tasks[2];
+
+inline union thread_info *current()
+{
+	return NULL;
+}
+
+void switch_to(union thread_info *prev, union thread_info *next)
+{
+	__asm__ volatile("ldr sp, %[next]\n\t"
+			"stmfd sp!, {lr}\n\t"
+			"stmfd sp!, {r4-r12}\n\t"
+			::[next]"g"(next));
+}
+
+void schedule()
+{
+}
 
 void print_uart0(const char *s) {
     while(*s != '\0') { /* Loop until end of string */

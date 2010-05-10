@@ -1,3 +1,5 @@
+#include "linkage.h"
+
 .text
 #define IRQ_OFFSET 24
 
@@ -41,6 +43,12 @@ SWI_Handler:
 	BL print_uart0
 	B .
 
+/* r0 = old, r1 = new */
+ENTRY(__switch_to)
+	ldr sp, r0
+	stmia sp!, {r4 - sl, fp, sp, lr}
+	B .
+ENDPROC(__switch_to)
 
 instruction:
 	.word 0xea00402b
